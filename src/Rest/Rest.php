@@ -73,10 +73,12 @@ class Rest
     public function restRequestAfterCallbacks($response, array $handler, WP_REST_Request $request)
     {
         // phpcs:enable
-        if (!isset($handler['callback'][0]) || !($handler['callback'][0] instanceof WP_REST_Posts_Controller)) {
-            return $response;
+        if(!is_callable($handler['callback'])){
+            if (!isset($handler['callback'][0]) || !($handler['callback'][0] instanceof WP_REST_Posts_Controller)) {
+                return $response;
+            }
         }
-
+        
         $idPrefix = $this->site->idSitePrefix();
         $attachmentId = (int)$request[self::REST_FIELD_THUMBNAIL_ID];
         $postId = (int)$request['id'];
